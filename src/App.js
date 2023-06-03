@@ -1,18 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import yaml from 'js-yaml';
 
 function App() {
-  const link = process.env.REACT_APP_LINK;
+  const [links, setLinks] = useState([]);
+
+  useEffect(() => {
+    const fetchLinks = async () => {
+      try {
+        const response = await fetch('./links.yaml');
+        const text = await response.text();
+        const parsedLinks = yaml.load(text);
+        setLinks(parsedLinks);
+      } catch (error) {
+        console.error('Error loading links:', error);
+      }
+    };
+
+    fetchLinks();
+  }, []);
+
+  if (links.length === 0) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
-      <iframe
-      title="App"
-        height="170px"
-        width="300px"
-        src={link}
-        allowFullScreen
-        scrolling='no'
-      ></iframe>
+      {links.map((link, index) => (
+        <div>
+        <h1>{link.title}</h1>
+        <iframe
+          key={index}
+          title={link.title}
+          height="500px"
+          width="1000px"
+          src={link.link}
+          allowFullScreen
+        ></iframe>
+        <br/>
+        </div>
+      ))}
     </div>
   );
 }
