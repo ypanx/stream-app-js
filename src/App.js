@@ -19,28 +19,30 @@ function App() {
     fetchLinks();
   }, []);
 
-  if (links.length === 0) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div>
-      {links.map((link, index) => (
+      {links.length === 0 ? (
+        <div>Loading...</div>
+      ) : (
         <div>
-        <h1>{link.title}</h1>
-        <iframe
-          key={index}
-          title={link.title}
-          height="500px"
-          width="1000px"
-          src={link.link}
-          allowFullScreen
-        ></iframe>
-        <br/>
+          {links.map((link, index) => (
+            <div>
+              <h1>{link.title}</h1>
+              <iframe
+                key={index}
+                title={link.title}
+                height="500px"
+                width="1000px"
+                src={link.link}
+                allowFullScreen
+              ></iframe>
+              <br/>
+            </div>
+        ))}
         </div>
-      ))}
+      )}
     </div>
   );
-}
+};
 
 export default App;
